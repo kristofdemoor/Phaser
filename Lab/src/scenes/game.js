@@ -9,4 +9,7 @@ export default class Game extends Phaser.Scene {
         this.generator = new Generator(this);
         this.generator.generateStars();
     }
+
+    update() {
+    }
 }

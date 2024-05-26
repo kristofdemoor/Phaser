@@ -1,7 +1,7 @@
 export default class Generator {
     constructor(scene) {
         this.scene = scene;
-        //this.scene.time.delayedCall(1000, () => this.init(), null, this);
+        this.scene.time.delayedCall(1000, () => this.init(), null, this);
     }
 
     init() {
@@ -9,11 +9,14 @@ export default class Generator {
     }
 
     generateStars() {
-        // create 1000 random moving stars
-        // for (let i = 0; i < 1500; i++) {
-        //     new Star(this.scene);
-        // }
-        new Star(this.scene);
+        // star speed 
+        const speedValues = [2000, 5000, 8000];
+        const speed = speedValues[Phaser.Math.Between(0, 2)];
+
+        // create new star
+        new Star(this.scene, speed);
+
+        // generate new star after 100ms
         this.scene.time.delayedCall(
             100,
             () => {
@@ -29,28 +32,28 @@ export default class Generator {
 // class to create a star with a random x, y, radius and alpha;
 // and move the star with a random speed 
 class Star extends Phaser.GameObjects.Graphics {
-    constructor(scene) {
+    constructor(scene, speed) {
         super(scene);
         // draw star
-        this.fillStyle(0xFFFFFF, Phaser.Math.FloatBetween(0.2, 1.0));
-        this.fillCircle(Phaser.Math.Between(0, 500), 805, Phaser.Math.FloatBetween(0.5, 1.8));
-        scene.add.existing(this);
-
+        this.draw();
         // move star
-        this.moveStar();
+        this.move(speed);
     }
 
-    moveStar() {
+    draw() {
+        this.fillStyle(0xFFFFFF, Phaser.Math.FloatBetween(0.2, 1.0));
+        this.fillCircle(Phaser.Math.Between(0, 500), 805, Phaser.Math.FloatBetween(0.5, 1.8));
+        this.scene.add.existing(this);
+    }
+
+    move(speed) {
         this.scene.tweens.add({
             targets: this,
             y: { from: -805, to: 0 },
-            duration: 6000,
+            duration: speed,
             onComplete: () => {
                 this.destroy;
             }
-
-        }
-
-        );
+        });
     }
 } 
