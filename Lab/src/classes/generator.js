@@ -9,22 +9,48 @@ export default class Generator {
     }
 
     generateStars() {
-        // create 1000 random stars
-        for (let i = 0; i < 1500; i++) {
-            new Star(this.scene);
-        }
+        // create 1000 random moving stars
+        // for (let i = 0; i < 1500; i++) {
+        //     new Star(this.scene);
+        // }
+        new Star(this.scene);
+        this.scene.time.delayedCall(
+            100,
+            () => {
+                this.generateStars();
+            },
+            null,
+            this
+        );
 
     }
 }
 
-
-// Class to create a star with a random x, y, radius and alpha;
+// class to create a star with a random x, y, radius and alpha;
+// and move the star with a random speed 
 class Star extends Phaser.GameObjects.Graphics {
     constructor(scene) {
         super(scene);
+        // draw star
         this.fillStyle(0xFFFFFF, Phaser.Math.FloatBetween(0.2, 1.0));
-        //this.fillCircle(Phaser.Math.Between(0, 500), Phaser.Math.Between(0, 800), Phaser.Math.Between(1, 2));
-        this.fillCircle(Phaser.Math.Between(0, 500), Phaser.Math.Between(0, 800), Phaser.Math.FloatBetween(0.5, 1.8));
+        this.fillCircle(Phaser.Math.Between(0, 500), 805, Phaser.Math.FloatBetween(0.5, 1.8));
         scene.add.existing(this);
+
+        // move star
+        this.moveStar();
+    }
+
+    moveStar() {
+        this.scene.tweens.add({
+            targets: this,
+            y: { from: -805, to: 0 },
+            duration: 6000,
+            onComplete: () => {
+                this.destroy;
+            }
+
+        }
+
+        );
     }
 } 
