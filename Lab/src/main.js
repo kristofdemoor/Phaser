@@ -1,8 +1,8 @@
 import Game from "./scenes/game.js";
 
 const config = {
-    width: 500,
-    heigth: 300,
+    width: 600,
+    heigth: 800,
     parent: "game-container",
     scale: {
         mode: Phaser.Scale.FIT,
