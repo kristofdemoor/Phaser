@@ -1,4 +1,4 @@
-import Generator from "/Lab/src/classes/generator.js";
+import Parallax from "/Lab/src/classes/parallax.js";
 
 export default class Game extends Phaser.Scene {
     constructor() {
@@ -11,9 +11,9 @@ export default class Game extends Phaser.Scene {
     }
 
     create() {
-        // Background animation
-        this.generator = new Generator(this);
-        this.generator.generateStars();
+        // Background parallex animation
+        this.parallax = new Parallax(this);
+        this.parallax.generateStars();
 
         // x-wing animation
         const config = {

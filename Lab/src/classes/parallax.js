@@ -1,4 +1,7 @@
-export default class Generator {
+
+"use strict"
+
+export default class Parallax {
     constructor(scene) {
         this.scene = scene;
         this.scene.time.delayedCall(1000, () => this.init(), null, this);
@@ -52,8 +55,10 @@ class Star extends Phaser.GameObjects.Graphics {
             y: { from: -805, to: 0 },
             duration: speed,
             onComplete: () => {
-                this.destroy;
+                this.destroy(true);
             }
         });
     }
+
 } 
+
