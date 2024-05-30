@@ -55,6 +55,7 @@ class Star extends Phaser.GameObjects.Graphics {
             y: { from: -805, to: 0 },
             duration: speed,
             onComplete: () => {
+                // remove gameobject from scene and memory
                 this.destroy(true);
             }
         });
