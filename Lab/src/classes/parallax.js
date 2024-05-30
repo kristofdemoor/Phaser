@@ -4,12 +4,13 @@
 export default class Parallax {
     constructor(scene) {
         this.scene = scene;
-        this.scene.time.delayedCall(1000, () => this.init(), null, this);
+        this.init();
     }
 
     init() {
         this.generateStars();
     }
+
 
     generateStars() {
         // star speed 
@@ -45,7 +46,7 @@ class Star extends Phaser.GameObjects.Graphics {
 
     draw() {
         this.fillStyle(0xFFFFFF, Phaser.Math.FloatBetween(0.2, 1.0));
-        this.fillCircle(Phaser.Math.Between(0, 500), 805, Phaser.Math.FloatBetween(0.5, 1.8));
+        this.fillCircle(Phaser.Math.Between(0, 600), 805, Phaser.Math.FloatBetween(0.5, 1.8));
         this.scene.add.existing(this);
     }
 
