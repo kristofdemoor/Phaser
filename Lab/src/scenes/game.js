@@ -13,13 +13,11 @@ export default class Game extends Phaser.Scene {
         // Background image
         this.load.image("galaxy", "./assets/galaxy.jpg");
 
-
         // player x-wing spritesheet
         this.load.spritesheet("x-wing", "./assets/spritesheet.png", {
             frameWidth: 64,
             frameHeight: 84,
         });
-
 
         // Player x-wing laser
         this.load.image("playerLaser", "./assets/laser-green.png");
@@ -28,7 +26,10 @@ export default class Game extends Phaser.Scene {
         this.load.image("enemy", "./assets/tie.png");
 
         // Explosion spritesheet
-        this.load.spritesheet("explosion", "./assets/explosion-spritesheet.png");
+        this.load.spritesheet("explosion-spritesheet", "./assets/explosion-spritesheet.png", {
+            frameWidth: 77,
+            frameHeight: 77,
+        });
     }
 
     create() {
@@ -41,16 +42,20 @@ export default class Game extends Phaser.Scene {
         // Enemy group
         this.enemies = this.physics.add.group({
             classType: Enemy,
-            runChildUpdate: true
+            runChildUpdate: true,
         });
 
         // Enemy grid
         this.createEnemyGrid(5, 8, 130, 100, 50, 50);
 
-        //this.enemy = new Enemy(this, 300, 100, "enemy");
-
         // Collision detection
-        this.physics.add.overlap(this.player.bullets, this.enemies, this.handleCollision, null, this);
+        this.physics.add.overlap(
+            this.player.bullets,
+            this.enemies,
+            this.handleCollision,
+            null,
+            this
+        );
 
         // Cursors
         this.cursors = this.input.keyboard.createCursorKeys();
@@ -61,11 +66,9 @@ export default class Game extends Phaser.Scene {
         // Move player x-wing
         if (this.cursors.left.isDown) {
             this.player.moveLeft();
-        }
-        else if (this.cursors.right.isDown) {
+        } else if (this.cursors.right.isDown) {
             this.player.moveRight();
-        }
-        else {
+        } else {
             this.player.stop();
         }
         // Shoot laser shoot
@@ -88,6 +91,19 @@ export default class Game extends Phaser.Scene {
         console.log("Enemy Shot!!!");
         enemy.destroy(true);
         bullet.destroy(true);
+        this.explosionAnimation(enemy);
+    }
 
+    explosionAnimation(enemy) {
+
+        const config = {
+            key: "explosion",
+            frames: "explosion-spritesheet",
+            frameRate: 70,
+            hideOnComplete: true,
+        };
+
+        this.anims.create(config);
+        this.add.sprite(enemy.x, enemy.y, "explosion-spritesheet").play("explosion");
     }
 }
