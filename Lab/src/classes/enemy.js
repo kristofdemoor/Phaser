@@ -4,5 +4,20 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
 
         scene.add.existing(this);
         scene.physics.add.existing(this);
+
+        this.move();
+    }
+
+    move() {
+        const speed = Phaser.Math.Between(1000, 5000);
+
+        this.scene.tweens.add({
+            targets: this,
+            y: 850,
+            duration: speed,
+            onComplete: () => {
+                this.destroy(true);
+            },
+        });
     }
 }

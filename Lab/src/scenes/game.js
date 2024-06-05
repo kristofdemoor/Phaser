@@ -46,7 +46,10 @@ export default class Game extends Phaser.Scene {
         });
 
         // Enemy grid
-        this.createEnemyGrid(5, 8, 130, 100, 50, 50);
+        //this.createEnemyGrid(5, 8, 130, 100, 50, 50);
+
+        // TO DO: Spawn enemy
+        this.spawnEnemy();
 
         // Collision detection
         this.physics.add.overlap(
@@ -95,7 +98,6 @@ export default class Game extends Phaser.Scene {
     }
 
     explosionAnimation(enemy) {
-
         const config = {
             key: "explosion",
             frames: "explosion-spritesheet",
@@ -105,5 +107,18 @@ export default class Game extends Phaser.Scene {
 
         this.anims.create(config);
         this.add.sprite(enemy.x, enemy.y, "explosion-spritesheet").play("explosion");
+    }
+
+    spawnEnemy() {
+        const delay = Phaser.Math.Between(0, 2000);
+        this.time.delayedCall(
+            delay,
+            () => {
+                this.enemies.get(Phaser.Math.Between(20, 580), -20, "enemy");
+                this.spawnEnemy();
+            },
+            null,
+            this
+        );
     }
 }
