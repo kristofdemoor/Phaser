@@ -11,20 +11,21 @@ export default class Game extends Phaser.Scene {
     preload() {
         // Background image
         this.load.image("galaxy", "./assets/galaxy.jpg");
-        
+
         // player x-wing spritesheet
         this.load.spritesheet("x-wing", "./assets/spritesheet.png", {
             frameWidth: 64,
             frameHeight: 84,
         });
-        
+
         // Player x-wing laser
         this.load.image("playerLaser", "./assets/laser-green.png");
 
         // Enemy Tie fighter
-        this.load.image("enemy", "./assets/tie.png")
+        this.load.image("enemy", "./assets/tie.png");
 
-
+        // Explosion spritesheet
+        this.load.spritesheet("explosion", "./assets/explosion-spritesheet.png");
     }
 
     create() {
@@ -36,7 +37,6 @@ export default class Game extends Phaser.Scene {
 
         // Enemy Tie
         this.enemy = this.physics.add.image(300, 200, "enemy");
-
 
         // Cursors
         this.cursors = this.input.keyboard.createCursorKeys();
@@ -58,9 +58,12 @@ export default class Game extends Phaser.Scene {
     }
 
     checkCollision() {
-        
         this.physics.add.overlap(this.player, this.enemy, () => {
             console.log("HIT");
-        })
+        });
+    }
+
+    explosionAnimation() {
+
     }
 }
