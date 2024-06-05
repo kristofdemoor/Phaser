@@ -1,53 +1,60 @@
+import Laser from "/Lab/src/classes/laser.js";
+
 export default class Player extends Phaser.GameObjects.Sprite {
-    constructor(scene, x, y, spritesheet, lazerImage) {
+    constructor(scene, x, y, spritesheet, lazerTexture) {
         super(scene, x, y, spritesheet);
 
-        this.scene = scene;
-        this.lazerImage = lazerImage;
-        this.speed = 5;
+        // Variables
+        this.lazerTexture = lazerTexture;
+        this.speed = 500;
+
+        // Add sprite to the scene
+        scene.add.existing(this);
+
+        // Add phisics to sprite
+        scene.physics.add.existing(this);
+
+        // Sprite collides with world bounds
+        this.body.setCollideWorldBounds(true);
+
+
+        // Bullet group
+        this.bullets = scene.physics.add.group({
+            classType: Laser,
+            maxSize: 3,
+            runChildUpdate: true
+        });
+
+        // this.scene = scene;
 
         // player x-wing animation
         const config = {
             key: "x-wing-animation",
-            frames: this.scene.anims.generateFrameNumbers(spritesheet),
+            frames: scene.anims.generateFrameNumbers(spritesheet),
             frameRate: 10,
             repeat: -1,
         };
 
         this.scene.anims.create(config);
-        this.body = this.scene.physics.add.sprite(x, y, spritesheet);
-        this.body.play("x-wing-animation");
-        this.body.setCollideWorldBounds(true);
+        //this.body = this.scene.physics.add.sprite(x, y, spritesheet);
+        //this.body.play("x-wing-animation");
+        this.play("x-wing-animation");
     }
 
+
     moveLeft() {
-        this.body.x -= this.speed;
+        this.body.setVelocityX(-this.speed);
     }
 
     moveRight() {
-        this.body.x += this.speed;
+        this.body.setVelocityX(this.speed);
+    }
+
+    stop() {
+        this.body.setVelocityX(0);
     }
 
     fire() {
-        new Laser(this.scene, this.body.x, this.body.y, this.lazerImage);
-    }
-}
-
-class Laser extends Phaser.GameObjects.Image {
-    constructor(scene, x, y, lazerImage) {
-        super(scene, x, y, lazerImage);
-
-        const offset = 65;
-        const laser = this.scene.physics.add.image(x, y - offset, lazerImage);
-
-        scene.tweens.add({
-            targets: laser,
-            y: { from: y - offset, to: -810 },
-            duration: 1000,
-            onComplete: () => {
-                // remove gameobject from scene and memory
-                this.destroy(true);
-            },
-        });
+        this.bullets.get(this.x, this.y - 65, this.lazerTexture);
     }
 }

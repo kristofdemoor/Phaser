@@ -1,5 +1,6 @@
-import Parallax from "/Lab/src/classes/parallax.js";
-import Player from "/Lab/src/classes/player.js";
+import Parallax from "../classes/parallax.js";
+import Player from "../classes/player.js";
+import Enemy from "../classes/enemy.js";
 
 export default class Game extends Phaser.Scene {
     constructor() {
@@ -12,11 +13,13 @@ export default class Game extends Phaser.Scene {
         // Background image
         this.load.image("galaxy", "./assets/galaxy.jpg");
 
+
         // player x-wing spritesheet
         this.load.spritesheet("x-wing", "./assets/spritesheet.png", {
             frameWidth: 64,
             frameHeight: 84,
         });
+
 
         // Player x-wing laser
         this.load.image("playerLaser", "./assets/laser-green.png");
@@ -35,8 +38,19 @@ export default class Game extends Phaser.Scene {
         // Player x-wing sprite
         this.player = new Player(this, 300, 600, "x-wing", "playerLaser");
 
-        // Enemy Tie
-        this.enemy = this.physics.add.image(300, 200, "enemy");
+        // Enemy group
+        this.enemies = this.physics.add.group({
+            classType: Enemy,
+            runChildUpdate: true
+        });
+
+        // Enemy grid
+        this.createEnemyGrid(5, 8, 130, 100, 50, 50);
+
+        //this.enemy = new Enemy(this, 300, 100, "enemy");
+
+        // Collision detection
+        this.physics.add.overlap(this.player.bullets, this.enemies, this.handleCollision, null, this);
 
         // Cursors
         this.cursors = this.input.keyboard.createCursorKeys();
@@ -48,8 +62,11 @@ export default class Game extends Phaser.Scene {
         if (this.cursors.left.isDown) {
             this.player.moveLeft();
         }
-        if (this.cursors.right.isDown) {
+        else if (this.cursors.right.isDown) {
             this.player.moveRight();
+        }
+        else {
+            this.player.stop();
         }
         // Shoot laser shoot
         if (Phaser.Input.Keyboard.JustDown(this.spacebar)) {
@@ -57,13 +74,20 @@ export default class Game extends Phaser.Scene {
         }
     }
 
-    checkCollision() {
-        this.physics.add.overlap(this.player, this.enemy, () => {
-            console.log("HIT");
-        });
+    createEnemyGrid(rows, cols, startX, startY, xSpacing, ySpacing) {
+        for (let row = 0; row < rows; row++) {
+            for (let col = 0; col < cols; col++) {
+                let x = startX + col * xSpacing;
+                let y = startY + row * ySpacing;
+                let enemy = this.enemies.get(x, y, "enemy");
+            }
+        }
     }
 
-    explosionAnimation() {
+    handleCollision(bullet, enemy) {
+        console.log("Enemy Shot!!!");
+        enemy.destroy(true);
+        bullet.destroy(true);
 
     }
 }

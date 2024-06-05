@@ -15,7 +15,6 @@ const config = {
             debug: false
         }
     },
-    backgroundColor: "#000000",
     scene: [Game]
 };
 
