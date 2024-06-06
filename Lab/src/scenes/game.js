@@ -14,6 +14,9 @@ export default class Game extends Phaser.Scene {
         // Background image
         this.load.image("galaxy", "./assets/galaxy.jpg");
 
+        // UI
+        this.load.image("UI", "./assets/UI.png");
+
         // player x-wing spritesheet
         this.load.spritesheet("x-wing", "./assets/spritesheet.png", {
             frameWidth: 64,
@@ -38,7 +41,7 @@ export default class Game extends Phaser.Scene {
         this.parallax = new Parallax(this, "galaxy");
 
         // Player x-wing sprite
-        this.player = new Player(this, 300, 600, "x-wing", "playerLaser");
+        this.player = new Player(this, 300, 580, "x-wing", "playerLaser");
 
         // Enemy group
         this.enemies = this.physics.add.group({
@@ -73,6 +76,9 @@ export default class Game extends Phaser.Scene {
         // Cursors
         this.cursors = this.input.keyboard.createCursorKeys();
         this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+
+        // UI
+        this.add.image(300, 710, "UI");
     }
 
     update() {
@@ -137,7 +143,6 @@ export default class Game extends Phaser.Scene {
             () => {
                 this.enemies.get(Phaser.Math.Between(20, 580), -20, "enemy");
                 this.spawnEnemy();
-
             },
             null,
             this
