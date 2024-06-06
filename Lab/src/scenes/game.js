@@ -141,7 +141,7 @@ export default class Game extends Phaser.Scene {
         this.time.delayedCall(
             delay,
             () => {
-                this.enemies.get(Phaser.Math.Between(20, 580), -20, "enemy");
+                this.enemies.get(Phaser.Math.Between(20, 580), -20, "enemy", "playerLaser");
                 this.spawnEnemy();
             },
             null,

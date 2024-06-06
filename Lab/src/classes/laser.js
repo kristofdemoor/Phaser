@@ -9,7 +9,7 @@ export default class Laser extends Phaser.Physics.Arcade.Sprite {
         scene.tweens.add({
             targets: this,
             y: destination,
-            duration: 1500,
+            //duration: 1500,
             ease: "Linear",
             onComplete: () => {
                 // remove gameobject from scene and memory
