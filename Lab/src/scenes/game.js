@@ -8,6 +8,7 @@ export default class Game extends Phaser.Scene {
     }
 
     player;
+    gameOver = false;
 
     preload() {
         // Background image
@@ -51,11 +52,20 @@ export default class Game extends Phaser.Scene {
         // TO DO: Spawn enemy
         this.spawnEnemy();
 
-        // Collision detection
+        // Collision detection between player lazer and enemy
         this.physics.add.overlap(
             this.player.bullets,
             this.enemies,
-            this.handleCollision,
+            this.handleLaserEnemyCollision,
+            null,
+            this
+        );
+
+        // Collision detection between player x-wing and enemy
+        this.physics.add.overlap(
+            this.player,
+            this.enemies,
+            this.handlePlayerEnemyCollision,
             null,
             this
         );
@@ -66,17 +76,19 @@ export default class Game extends Phaser.Scene {
     }
 
     update() {
-        // Move player x-wing
-        if (this.cursors.left.isDown) {
-            this.player.moveLeft();
-        } else if (this.cursors.right.isDown) {
-            this.player.moveRight();
-        } else {
-            this.player.stop();
-        }
-        // Shoot laser shoot
-        if (Phaser.Input.Keyboard.JustDown(this.spacebar)) {
-            this.player.fire();
+        if (!this.gameOver) {
+            // Move player x-wing
+            if (this.cursors.left.isDown) {
+                this.player.moveLeft();
+            } else if (this.cursors.right.isDown) {
+                this.player.moveRight();
+            } else {
+                this.player.stop();
+            }
+            // Shoot laser shoot
+            if (Phaser.Input.Keyboard.JustDown(this.spacebar)) {
+                this.player.fire();
+            }
         }
     }
 
@@ -90,11 +102,20 @@ export default class Game extends Phaser.Scene {
         }
     }
 
-    handleCollision(bullet, enemy) {
+    handleLaserEnemyCollision(bullet, enemy) {
         console.log("Enemy Shot!!!");
         enemy.destroy(true);
         bullet.destroy(true);
         this.explosionAnimation(enemy);
+    }
+
+    handlePlayerEnemyCollision(player, enemy) {
+        console.log("Player and Enemy Killed");
+        this.gameOver = true;
+        this.explosionAnimation(enemy);
+        this.explosionAnimation(player);
+        enemy.destroy(true);
+        player.destroy(true);
     }
 
     explosionAnimation(enemy) {
@@ -116,6 +137,7 @@ export default class Game extends Phaser.Scene {
             () => {
                 this.enemies.get(Phaser.Math.Between(20, 580), -20, "enemy");
                 this.spawnEnemy();
+
             },
             null,
             this

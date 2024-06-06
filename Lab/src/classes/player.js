@@ -55,6 +55,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
     }
 
     fire() {
-        this.bullets.get(this.x, this.y - 65, this.lazerTexture);
+        this.bullets.get(this.x, this.y - 65, this.lazerTexture, -800);
     }
 }
