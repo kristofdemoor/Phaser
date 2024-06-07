@@ -1,11 +1,11 @@
 import Laser from "/Lab/src/classes/laser.js";
 
 export default class Player extends Phaser.GameObjects.Sprite {
-    constructor(scene, x, y, spritesheet, lazerTexture) {
+    constructor(scene, x, y, spritesheet, laserTexture) {
         super(scene, x, y, spritesheet);
 
         // Variables
-        this.lazerTexture = lazerTexture;
+        this.laserTexture = laserTexture;
         this.speed = 500;
 
         // Add sprite to the scene
@@ -19,9 +19,9 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
 
         // Bullet group
-        this.bullets = scene.physics.add.group({
+        this.lasers = scene.physics.add.group({
             classType: Laser,
-            maxSize: 3,
+            maxSize: 2,
             runChildUpdate: true
         });
 
@@ -55,6 +55,9 @@ export default class Player extends Phaser.GameObjects.Sprite {
     }
 
     fire() {
-        this.bullets.get(this.x, this.y - 65, this.lazerTexture, -800);
+        // console.log(this.lasers.getChildren());
+        const laser = this.lasers.get(this.x, this.y - 65, this.laserTexture, -1);
+        // this.lasers.add(laser);
+        this.scene.playerLasers.add(laser);
     }
 }

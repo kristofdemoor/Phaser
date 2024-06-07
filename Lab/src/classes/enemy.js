@@ -8,12 +8,20 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
         this.enemyTexture = enemyTexture;
         this.laserTexture = laserTexture;
 
+        // Random number which is used to determine when to fire a laser
+        this.randomY = Phaser.Math.Between(0, 200);
+
         scene.add.existing(this);
         scene.physics.add.existing(this);
 
-        this.move();
+        // Bullet group
+        this.lasers = scene.physics.add.group({
+            classType: Laser,
+            //maxSize: 2,
+            runChildUpdate: true
+        });
 
-        this.fire();
+        this.move();
     }
 
     move() {
@@ -30,15 +38,7 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
     }
 
     fire() {
-        //const delay = Phaser.Math.Between(500, 10000);
-        this.scene.time.delayedCall(
-            1000,
-            () => {
-                new Laser(this.scene, this.x, this.y + 30, this.laserTexture, 1000);
-                console.log("Enemy Fired!!!");
-            },
-            null,
-            this
-        );
+        const laser = this.lasers.get(this.x, this.y + 30, this.laserTexture, 1);
+        this.scene.enemyLasers.add(laser);
     }
 }
