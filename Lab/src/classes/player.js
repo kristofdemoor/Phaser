@@ -7,6 +7,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
         // Variables
         this.laserTexture = laserTexture;
         this.speed = 500;
+        this.score = 0;
 
         // Add sprite to the scene
         scene.add.existing(this);
@@ -55,9 +56,13 @@ export default class Player extends Phaser.GameObjects.Sprite {
     }
 
     fire() {
-        // console.log(this.lasers.getChildren());
         const laser = this.lasers.get(this.x, this.y - 65, this.laserTexture, -1);
-        // this.lasers.add(laser);
         this.scene.playerLasers.add(laser);
+        // play sound if there is a laser available
+        if (laser) {
+            this.scene.laserSound.play();
+        }
+
+
     }
 }

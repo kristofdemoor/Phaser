@@ -8,7 +8,9 @@ export default class Game extends Phaser.Scene {
         super({ key: "gameScene" });
     }
 
+    // Variables
     player;
+    points = 25;
     gameOver = false;
     laserSound;
     explosionSound;
@@ -21,7 +23,7 @@ export default class Game extends Phaser.Scene {
         // UI
         this.load.image("UI", "./assets/UI.png");
 
-        // player spritesheet
+        // Player
         this.load.spritesheet("x-wing", "./assets/spritesheet.png", {
             frameWidth: 64,
             frameHeight: 84,
@@ -31,25 +33,21 @@ export default class Game extends Phaser.Scene {
         this.load.image("playerLaser", "./assets/laser-green.png");
 
 
-        // Enemy Tie fighter
+        // Enemy
         this.load.image("enemy", "./assets/tie.png");
 
         // Enemy laser
         this.load.image("enemyLaser", "./assets/laser-red.png");
 
-        // Explosion spritesheet
+        // Explosion
         this.load.spritesheet("explosion-spritesheet", "./assets/explosion-spritesheet.png", {
             frameWidth: 77,
             frameHeight: 77,
         });
 
-        // Laser sound
+        // Sounds
         this.load.audio("laserSound", "./assets/sounds/laser.mp3");
-
-        // Explosion sound
         this.load.audio("explosionSound", "./assets/sounds/explosion.mp3");
-
-        // Background music
         this.load.audio("theme", "./assets/sounds/theme.mp3");
     }
 
@@ -82,7 +80,7 @@ export default class Game extends Phaser.Scene {
         // UI
         this.ui = this.add.image(300, 710, "UI");
         this.physics.add.existing(this.ui);
-        console.log(this.ui);
+
 
         // Enemy grid
         //this.createEnemyGrid(5, 8, 130, 100, 50, 50);
@@ -144,6 +142,16 @@ export default class Game extends Phaser.Scene {
         this.explosionSound = this.sound.add("explosionSound");
         this.themeSound = this.sound.add("theme", { loop: true });
         this.themeSound.play();
+
+        // Explosion Animation
+        const config = {
+            key: "explosion",
+            frames: "explosion-spritesheet",
+            frameRate: 70,
+            hideOnComplete: true,
+        };
+
+        this.anims.create(config);
     }
 
     update() {
@@ -160,7 +168,7 @@ export default class Game extends Phaser.Scene {
             // Player laser fire
             if (Phaser.Input.Keyboard.JustDown(this.spacebar)) {
                 this.player.fire();
-                this.laserSound.play();
+                //this.laserSound.play();
             }
 
             // Update player laser
@@ -197,6 +205,7 @@ export default class Game extends Phaser.Scene {
         laser.destroy(true);
         this.explosionAnimation(enemy);
         this.explosionSound.play();
+        this.player.score += this.points;
     }
 
     handlePlayerEnemyCollision(player, enemy) {
@@ -205,10 +214,13 @@ export default class Game extends Phaser.Scene {
         this.explosionAnimation(enemy);
         this.explosionAnimation(player);
         enemy.destroy(true);
-        //player.destroy(true);
+        player.destroy(true);
         this.explosionSound.play();
+
+        this.showScore();
+
         //TO DO
-        this.respawn();
+        //this.respawn();
     }
 
     handleEnemyLaserPlayerCollision(player, laser) {
@@ -218,6 +230,8 @@ export default class Game extends Phaser.Scene {
         player.destroy(true);
         laser.destroy(true);
         this.explosionSound.play();
+
+        this.showScore();
     }
 
     handleEnemyLaserUICollision(ui, laser) {
@@ -225,19 +239,18 @@ export default class Game extends Phaser.Scene {
     }
 
     handleEnemyUICollision(ui, enemy) {
-        console.log("UI hit!");
         enemy.setAlpha(0.5);
     }
 
     explosionAnimation(enemy) {
-        const config = {
-            key: "explosion",
-            frames: "explosion-spritesheet",
-            frameRate: 70,
-            hideOnComplete: true,
-        };
+        // const config = {
+        //     key: "explosion",
+        //     frames: "explosion-spritesheet",
+        //     frameRate: 70,
+        //     hideOnComplete: true,
+        // };
 
-        this.anims.create(config);
+        // this.anims.create(config);
         this.add.sprite(enemy.x, enemy.y, "explosion-spritesheet").play("explosion");
     }
 
@@ -285,5 +298,9 @@ export default class Game extends Phaser.Scene {
 
         this.player.setAlpha(1);
 
+    }
+
+    showScore() {
+        console.log(`Score: ${this.player.score}`);
     }
 }
