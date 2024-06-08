@@ -10,6 +10,9 @@ export default class Game extends Phaser.Scene {
 
     player;
     gameOver = false;
+    laserSound;
+    explosionSound;
+    themeSound;
 
     preload() {
         // Background image
@@ -39,6 +42,15 @@ export default class Game extends Phaser.Scene {
             frameWidth: 77,
             frameHeight: 77,
         });
+
+        // Laser sound
+        this.load.audio("laserSound", "./assets/sounds/laser.mp3");
+
+        // Explosion sound
+        this.load.audio("explosionSound", "./assets/sounds/explosion.mp3");
+
+        // Background music
+        this.load.audio("theme", "./assets/sounds/theme.mp3");
     }
 
     create() {
@@ -123,11 +135,15 @@ export default class Game extends Phaser.Scene {
             this
         );
 
-
-
         // Cursors
         this.cursors = this.input.keyboard.createCursorKeys();
         this.spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+
+        // Sounds
+        this.laserSound = this.sound.add("laserSound");
+        this.explosionSound = this.sound.add("explosionSound");
+        this.themeSound = this.sound.add("theme", { loop: true });
+        this.themeSound.play();
     }
 
     update() {
@@ -144,6 +160,7 @@ export default class Game extends Phaser.Scene {
             // Player laser fire
             if (Phaser.Input.Keyboard.JustDown(this.spacebar)) {
                 this.player.fire();
+                this.laserSound.play();
             }
 
             // Update player laser
@@ -153,6 +170,7 @@ export default class Game extends Phaser.Scene {
             this.enemies.getChildren().forEach(enemy => {
                 if (Math.round(enemy.y) === enemy.randomY) {
                     enemy.fire();
+                    this.laserSound.play();
                 }
             });
 
@@ -178,6 +196,7 @@ export default class Game extends Phaser.Scene {
         enemy.destroy(true);
         laser.destroy(true);
         this.explosionAnimation(enemy);
+        this.explosionSound.play();
     }
 
     handlePlayerEnemyCollision(player, enemy) {
@@ -186,7 +205,10 @@ export default class Game extends Phaser.Scene {
         this.explosionAnimation(enemy);
         this.explosionAnimation(player);
         enemy.destroy(true);
-        player.destroy(true);
+        //player.destroy(true);
+        this.explosionSound.play();
+        //TO DO
+        this.respawn();
     }
 
     handleEnemyLaserPlayerCollision(player, laser) {
@@ -195,6 +217,7 @@ export default class Game extends Phaser.Scene {
         this.explosionAnimation(player);
         player.destroy(true);
         laser.destroy(true);
+        this.explosionSound.play();
     }
 
     handleEnemyLaserUICollision(ui, laser) {
@@ -230,5 +253,37 @@ export default class Game extends Phaser.Scene {
             null,
             this
         );
+    }
+
+    // TO DO
+    respawn() {
+
+        this.player.x = 300;
+
+        this.player.setAlpha(0);
+
+
+        this.time.delayedCall(
+            5000,
+            () => {
+                this.player.setAlpha(0.2);
+            }
+        );
+        this.time.delayedCall(
+            5000,
+            () => {
+                this.player.setAlpha(0.8);
+            }
+        );
+        this.time.delayedCall(
+            5000,
+            () => {
+                this.player.setAlpha(0.2);
+            }
+        );
+
+
+        this.player.setAlpha(1);
+
     }
 }
