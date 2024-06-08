@@ -81,10 +81,6 @@ export default class Game extends Phaser.Scene {
         this.ui = this.add.image(300, 710, "UI");
         this.physics.add.existing(this.ui);
 
-
-        // Enemy grid
-        //this.createEnemyGrid(5, 8, 130, 100, 50, 50);
-
         // Spawn enemy
         this.spawnEnemy();
 
@@ -168,7 +164,6 @@ export default class Game extends Phaser.Scene {
             // Player laser fire
             if (Phaser.Input.Keyboard.JustDown(this.spacebar)) {
                 this.player.fire();
-                //this.laserSound.play();
             }
 
             // Update player laser
@@ -243,14 +238,6 @@ export default class Game extends Phaser.Scene {
     }
 
     explosionAnimation(enemy) {
-        // const config = {
-        //     key: "explosion",
-        //     frames: "explosion-spritesheet",
-        //     frameRate: 70,
-        //     hideOnComplete: true,
-        // };
-
-        // this.anims.create(config);
         this.add.sprite(enemy.x, enemy.y, "explosion-spritesheet").play("explosion");
     }
 
@@ -260,7 +247,6 @@ export default class Game extends Phaser.Scene {
             delay,
             () => {
                 const enemy = this.enemies.get(Phaser.Math.Between(20, 580), -20, "enemy", "enemyLaser");
-                //enemy.fire();
                 this.spawnEnemy();
             },
             null,
