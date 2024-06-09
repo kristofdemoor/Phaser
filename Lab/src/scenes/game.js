@@ -2,6 +2,7 @@ import Parallax from "../classes/parallax.js";
 import Player from "../classes/player.js";
 import Enemy from "../classes/enemy.js";
 import Laser from "../classes/laser.js";
+import Timer from "../classes/timer.js";
 
 export default class Game extends Phaser.Scene {
     constructor() {
@@ -16,6 +17,11 @@ export default class Game extends Phaser.Scene {
     explosionSound;
     themeSound;
     scoreText = "00000";
+    playerLive1;
+    playerLive2;
+    playerLive3;
+    seconds = 60;
+
 
 
     preload() {
@@ -24,6 +30,8 @@ export default class Game extends Phaser.Scene {
 
         // UI
         this.load.image("UI", "./assets/UI.png");
+        this.load.image("x-wing-UI-light", "./assets/x-wing-UI-light.png");
+        this.load.image("x-wing-UI-dark", "./assets/x-wing-UI-dark.png");
 
         // Player
         this.load.spritesheet("x-wing", "./assets/spritesheet.png", {
@@ -156,14 +164,26 @@ export default class Game extends Phaser.Scene {
         // UI
         //------------
 
-        // Player Lives
-        this.add.image(50, 700, "");
+        // Lives
+        this.playerLive1 = this.add.image(50, 730, "x-wing-UI-light");
+        this.playerLive2 = this.add.image(80, 730, "x-wing-UI-light");
+        this.playerLive3 = this.add.image(110, 730, "x-wing-UI-light");
 
 
-        // Score Text
+        // Score 
         this.scoreText = this.add.text(253, 695, "00000", {
             fontFamily: "DS-Digital",
             fontSize: 40,
+            color: "#a0a0a0"
+        });
+
+        // Timer
+
+        this.updateTimer();
+
+        this.timerSeconds = this.add.text(500, 710, this.seconds, {
+            fontFamily: "DS-Digital",
+            fontSize: 28,
             color: "#a0a0a0"
         });
 
@@ -198,7 +218,6 @@ export default class Game extends Phaser.Scene {
 
             // Update enemy laser 
             this.enemyLasers.getChildren().forEach(laser => laser.update());
-
         }
 
     }
@@ -232,7 +251,9 @@ export default class Game extends Phaser.Scene {
         enemy.destroy(true);
         player.destroy(true);
         this.explosionSound.play();
+        this.updateLives();
 
+        // DEBUG
         this.showScore();
 
         //TO DO
@@ -246,7 +267,9 @@ export default class Game extends Phaser.Scene {
         player.destroy(true);
         laser.destroy(true);
         this.explosionSound.play();
+        this.updateLives();
 
+        // DEBUG
         this.showScore();
     }
 
@@ -321,5 +344,23 @@ export default class Game extends Phaser.Scene {
         const score = this.player.score;
         const scoreText = score.toString().padStart(5, "0");
         this.scoreText.setText(scoreText);
+    }
+
+    updateLives() {
+        this.player.lives--;
+
+        switch (this.player.lives) {
+            case 2:
+                this.playerLive3 = this.add.image(110, 730, "x-wing-UI-dark");
+
+        }
+    }
+
+    updateTimer() {
+        this.time.delayedCall(1000, () => {
+            this.seconds--;
+            this.timerSeconds.setText(this.seconds);
+            this.updateTimer();
+        });
     }
 }
