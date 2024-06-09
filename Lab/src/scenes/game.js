@@ -15,6 +15,8 @@ export default class Game extends Phaser.Scene {
     laserSound;
     explosionSound;
     themeSound;
+    scoreText = "00000";
+
 
     preload() {
         // Background image
@@ -52,6 +54,7 @@ export default class Game extends Phaser.Scene {
     }
 
     create() {
+
         // Parallax background
         this.parallax = new Parallax(this, "galaxy");
 
@@ -148,6 +151,22 @@ export default class Game extends Phaser.Scene {
         };
 
         this.anims.create(config);
+
+        //------------
+        // UI
+        //------------
+
+        // Player Lives
+        this.add.image(50, 700, "");
+
+
+        // Score Text
+        this.scoreText = this.add.text(253, 695, "00000", {
+            fontFamily: "DS-Digital",
+            fontSize: 40,
+            color: "#a0a0a0"
+        });
+
     }
 
     update() {
@@ -194,13 +213,15 @@ export default class Game extends Phaser.Scene {
         }
     }
 
+
     handleLaserEnemyCollision(laser, enemy) {
         console.log("Enemy Shot!");
         enemy.destroy(true);
         laser.destroy(true);
         this.explosionAnimation(enemy);
         this.explosionSound.play();
-        this.player.score += this.points;
+        this.updateScore();
+
     }
 
     handlePlayerEnemyCollision(player, enemy) {
@@ -288,5 +309,17 @@ export default class Game extends Phaser.Scene {
 
     showScore() {
         console.log(`Score: ${this.player.score}`);
+    }
+
+    updateScore() {
+        this.player.score += this.points;
+        this.displayScore();
+    }
+
+    displayScore() {
+        // add leading zeros to score
+        const score = this.player.score;
+        const scoreText = score.toString().padStart(5, "0");
+        this.scoreText.setText(scoreText);
     }
 }

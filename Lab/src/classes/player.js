@@ -8,6 +8,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
         this.laserTexture = laserTexture;
         this.speed = 500;
         this.score = 0;
+        this.lives = 3;
 
         // Add sprite to the scene
         scene.add.existing(this);
