@@ -1,12 +1,13 @@
 import Laser from "/Lab/src/classes/laser.js";
 
 export default class Player extends Phaser.GameObjects.Sprite {
-    constructor(scene, x, y, spritesheet, lazerTexture) {
+    constructor(scene, x, y, spritesheet, laserTexture) {
         super(scene, x, y, spritesheet);
 
         // Variables
-        this.lazerTexture = lazerTexture;
+        this.laserTexture = laserTexture;
         this.speed = 500;
+        this.score = 0;
 
         // Add sprite to the scene
         scene.add.existing(this);
@@ -18,14 +19,12 @@ export default class Player extends Phaser.GameObjects.Sprite {
         this.body.setCollideWorldBounds(true);
 
 
-        // Bullet group
-        this.bullets = scene.physics.add.group({
+        // Laser group
+        this.lasers = scene.physics.add.group({
             classType: Laser,
-            maxSize: 3,
+            maxSize: 2,
             runChildUpdate: true
         });
-
-        // this.scene = scene;
 
         // player x-wing animation
         const config = {
@@ -36,8 +35,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
         };
 
         this.scene.anims.create(config);
-        //this.body = this.scene.physics.add.sprite(x, y, spritesheet);
-        //this.body.play("x-wing-animation");
         this.play("x-wing-animation");
     }
 
@@ -55,6 +52,13 @@ export default class Player extends Phaser.GameObjects.Sprite {
     }
 
     fire() {
-        this.bullets.get(this.x, this.y - 65, this.lazerTexture, -800);
+        const laser = this.lasers.get(this.x, this.y - 65, this.laserTexture, -1);
+        // Only add laser to group and play sound if there is a laser available
+        if (laser) {
+            this.scene.playerLasers.add(laser);
+            this.scene.laserSound.play();
+        }
+
+
     }
 }
