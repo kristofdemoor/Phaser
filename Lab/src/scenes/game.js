@@ -22,8 +22,6 @@ export default class Game extends Phaser.Scene {
     playerLive3;
     seconds = 60;
 
-
-
     preload() {
         // Background image
         this.load.image("galaxy", "./assets/galaxy.jpg");
@@ -41,7 +39,6 @@ export default class Game extends Phaser.Scene {
 
         // Player laser
         this.load.image("playerLaser", "./assets/laser-green.png");
-
 
         // Enemy
         this.load.image("enemy", "./assets/tie.png");
@@ -62,7 +59,6 @@ export default class Game extends Phaser.Scene {
     }
 
     create() {
-
         // Parallax background
         this.parallax = new Parallax(this, "galaxy");
 
@@ -132,13 +128,7 @@ export default class Game extends Phaser.Scene {
         );
 
         // Collision check for enemy and UI
-        this.physics.add.overlap(
-            this.enemies,
-            this.ui,
-            this.handleEnemyUICollision,
-            null,
-            this
-        );
+        this.physics.add.overlap(this.enemies, this.ui, this.handleEnemyUICollision, null, this);
 
         // Cursors
         this.cursors = this.input.keyboard.createCursorKeys();
@@ -169,24 +159,24 @@ export default class Game extends Phaser.Scene {
         this.playerLive2 = this.add.image(80, 730, "x-wing-UI-light");
         this.playerLive3 = this.add.image(110, 730, "x-wing-UI-light");
 
-
-        // Score 
+        // Score
         this.scoreText = this.add.text(253, 695, "00000", {
             fontFamily: "DS-Digital",
             fontSize: 40,
-            color: "#a0a0a0"
+            color: "#a0a0a0",
         });
 
         // Timer
 
         this.updateTimer();
 
-        this.timerSeconds = this.add.text(500, 710, this.seconds, {
+        const timerText = "00:00:" + this.seconds;
+
+        this.timerSeconds = this.add.text(500, 710, timerText, {
             fontFamily: "DS-Digital",
             fontSize: 28,
-            color: "#a0a0a0"
+            color: "#a0a0a0",
         });
-
     }
 
     update() {
@@ -206,20 +196,19 @@ export default class Game extends Phaser.Scene {
             }
 
             // Update player laser
-            this.playerLasers.getChildren().forEach(laser => laser.update());
+            this.playerLasers.getChildren().forEach((laser) => laser.update());
 
             // Enemy laser fire
-            this.enemies.getChildren().forEach(enemy => {
+            this.enemies.getChildren().forEach((enemy) => {
                 if (Math.round(enemy.y) === enemy.randomY) {
                     enemy.fire();
                     this.laserSound.play();
                 }
             });
 
-            // Update enemy laser 
-            this.enemyLasers.getChildren().forEach(laser => laser.update());
+            // Update enemy laser
+            this.enemyLasers.getChildren().forEach((laser) => laser.update());
         }
-
     }
 
     createEnemyGrid(rows, cols, startX, startY, xSpacing, ySpacing) {
@@ -232,7 +221,6 @@ export default class Game extends Phaser.Scene {
         }
     }
 
-
     handleLaserEnemyCollision(laser, enemy) {
         console.log("Enemy Shot!");
         enemy.destroy(true);
@@ -240,7 +228,6 @@ export default class Game extends Phaser.Scene {
         this.explosionAnimation(enemy);
         this.explosionSound.play();
         this.updateScore();
-
     }
 
     handlePlayerEnemyCollision(player, enemy) {
@@ -290,7 +277,12 @@ export default class Game extends Phaser.Scene {
         this.time.delayedCall(
             delay,
             () => {
-                const enemy = this.enemies.get(Phaser.Math.Between(20, 580), -20, "enemy", "enemyLaser");
+                const enemy = this.enemies.get(
+                    Phaser.Math.Between(20, 580),
+                    -20,
+                    "enemy",
+                    "enemyLaser"
+                );
                 this.spawnEnemy();
             },
             null,
@@ -300,34 +292,21 @@ export default class Game extends Phaser.Scene {
 
     // TO DO
     respawn() {
-
         this.player.x = 300;
 
         this.player.setAlpha(0);
 
-
-        this.time.delayedCall(
-            5000,
-            () => {
-                this.player.setAlpha(0.2);
-            }
-        );
-        this.time.delayedCall(
-            5000,
-            () => {
-                this.player.setAlpha(0.8);
-            }
-        );
-        this.time.delayedCall(
-            5000,
-            () => {
-                this.player.setAlpha(0.2);
-            }
-        );
-
+        this.time.delayedCall(5000, () => {
+            this.player.setAlpha(0.2);
+        });
+        this.time.delayedCall(5000, () => {
+            this.player.setAlpha(0.8);
+        });
+        this.time.delayedCall(5000, () => {
+            this.player.setAlpha(0.2);
+        });
 
         this.player.setAlpha(1);
-
     }
 
     showScore() {
@@ -352,7 +331,6 @@ export default class Game extends Phaser.Scene {
         switch (this.player.lives) {
             case 2:
                 this.playerLive3 = this.add.image(110, 730, "x-wing-UI-dark");
-
         }
     }
 
