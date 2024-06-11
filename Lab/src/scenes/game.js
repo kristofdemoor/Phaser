@@ -20,7 +20,7 @@ export default class Game extends Phaser.Scene {
     playerLive1;
     playerLive2;
     playerLive3;
-    seconds = 60;
+    timer;
 
     preload() {
         // Background image
@@ -167,16 +167,18 @@ export default class Game extends Phaser.Scene {
         });
 
         // Timer
+        this.timer = new Timer(this, 120);
 
-        this.updateTimer();
-
-        const timerText = "00:00:" + this.seconds;
-
-        this.timerSeconds = this.add.text(500, 710, timerText, {
-            fontFamily: "DS-Digital",
-            fontSize: 28,
-            color: "#a0a0a0",
-        });
+        this.timerText = this.add.text(
+            475,
+            715,
+            this.timer.minutes + ":" + this.timer.seconds + ":" + this.timer.miliseconds,
+            {
+                fontFamily: "DS-Digital",
+                fontSize: 28,
+                color: "#a0a0a0",
+            }
+        );
     }
 
     update() {
@@ -208,16 +210,9 @@ export default class Game extends Phaser.Scene {
 
             // Update enemy laser
             this.enemyLasers.getChildren().forEach((laser) => laser.update());
-        }
-    }
 
-    createEnemyGrid(rows, cols, startX, startY, xSpacing, ySpacing) {
-        for (let row = 0; row < rows; row++) {
-            for (let col = 0; col < cols; col++) {
-                let x = startX + col * xSpacing;
-                let y = startY + row * ySpacing;
-                let enemy = this.enemies.get(x, y, "enemy");
-            }
+            // Timer
+            this.updateTime();
         }
     }
 
@@ -231,33 +226,26 @@ export default class Game extends Phaser.Scene {
     }
 
     handlePlayerEnemyCollision(player, enemy) {
-        console.log("Player and Enemy Killed!");
-        this.gameOver = true;
-        this.explosionAnimation(enemy);
-        this.explosionAnimation(player);
-        enemy.destroy(true);
-        player.destroy(true);
-        this.explosionSound.play();
-        this.updateLives();
-
-        // DEBUG
-        this.showScore();
-
-        //TO DO
-        //this.respawn();
+        if (!this.player.invincible) {
+            console.log("Player and Enemy Killed!");
+            this.explosionAnimation(enemy);
+            this.explosionAnimation(player);
+            enemy.destroy(true);
+            this.explosionSound.play();
+            this.updateLives();
+            this.player.respawn();
+        }
     }
 
     handleEnemyLaserPlayerCollision(player, laser) {
-        console.log("Player Hit!");
-        this.gameOver = true;
-        this.explosionAnimation(player);
-        player.destroy(true);
-        laser.destroy(true);
-        this.explosionSound.play();
-        this.updateLives();
-
-        // DEBUG
-        this.showScore();
+        if (!this.player.invincible) {
+            console.log("Player Hit!");
+            this.explosionAnimation(player);
+            laser.destroy(true);
+            this.explosionSound.play();
+            this.updateLives();
+            this.player.respawn();
+        }
     }
 
     handleEnemyLaserUICollision(ui, laser) {
@@ -290,25 +278,6 @@ export default class Game extends Phaser.Scene {
         );
     }
 
-    // TO DO
-    respawn() {
-        this.player.x = 300;
-
-        this.player.setAlpha(0);
-
-        this.time.delayedCall(5000, () => {
-            this.player.setAlpha(0.2);
-        });
-        this.time.delayedCall(5000, () => {
-            this.player.setAlpha(0.8);
-        });
-        this.time.delayedCall(5000, () => {
-            this.player.setAlpha(0.2);
-        });
-
-        this.player.setAlpha(1);
-    }
-
     showScore() {
         console.log(`Score: ${this.player.score}`);
     }
@@ -327,18 +296,39 @@ export default class Game extends Phaser.Scene {
 
     updateLives() {
         this.player.lives--;
-
-        switch (this.player.lives) {
-            case 2:
-                this.playerLive3 = this.add.image(110, 730, "x-wing-UI-dark");
+        if (this.player.lives === 2) {
+            this.playerLive3.setTexture("x-wing-UI-dark");
+        }
+        if (this.player.lives === 1) {
+            this.playerLive2.setTexture("x-wing-UI-dark");
+        }
+        if (this.player.lives === 0) {
+            this.playerLive1.setTexture("x-wing-UI-dark");
+            this.playerKilled();
         }
     }
 
-    updateTimer() {
-        this.time.delayedCall(1000, () => {
-            this.seconds--;
-            this.timerSeconds.setText(this.seconds);
-            this.updateTimer();
-        });
+    updateTime() {
+        let minutesText = this.timer.minutes;
+        let secondsText = this.timer.seconds;
+        let miliseconds = this.timer.miliseconds;
+
+        if (minutesText <= 10) {
+            minutesText = "0" + minutesText;
+        }
+        if (secondsText <= 10) {
+            secondsText = "0" + secondsText;
+        }
+        if (miliseconds <= 10) {
+            miliseconds = "0" + miliseconds;
+        }
+        this.timerText.setText(minutesText + ":" + secondsText) + ":" + miliseconds;
+        //this.timerText.setText(this.timer.seconds);
+    }
+
+    playerKilled() {
+        console.log("GAME OVER!");
+        this.themeSound.stop();
+        this.scene.start("gameOverScene");
     }
 }

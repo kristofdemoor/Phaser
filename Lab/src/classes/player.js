@@ -9,6 +9,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
         this.speed = 500;
         this.score = 0;
         this.lives = 3;
+        this.invincible = false;
 
         // Add sprite to the scene
         scene.add.existing(this);
@@ -19,12 +20,11 @@ export default class Player extends Phaser.GameObjects.Sprite {
         // Sprite collides with world bounds
         this.body.setCollideWorldBounds(true);
 
-
         // Laser group
         this.lasers = scene.physics.add.group({
             classType: Laser,
             maxSize: 2,
-            runChildUpdate: true
+            runChildUpdate: true,
         });
 
         // player x-wing animation
@@ -38,7 +38,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
         this.scene.anims.create(config);
         this.play("x-wing-animation");
     }
-
 
     moveLeft() {
         this.body.setVelocityX(-this.speed);
@@ -59,7 +58,26 @@ export default class Player extends Phaser.GameObjects.Sprite {
             this.scene.playerLasers.add(laser);
             this.scene.laserSound.play();
         }
+    }
 
-
+    respawn() {
+        this.setVisible(false);
+        this.invincible = true;
+        // Flicker
+        this.scene.time.delayedCall(1000, () => {
+            this.x = 300;
+            this.y = 580;
+            this.setVisible(true);
+            this.scene.add.tween({
+                targets: this,
+                duration: 80,
+                alpha: 0,
+                yoyo: true,
+                repeat: 20,
+                onComplete: () => {
+                    this.invincible = false;
+                },
+            });
+        });
     }
 }

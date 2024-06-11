@@ -1,4 +1,5 @@
 import Game from "./scenes/game.js";
+import GameOver from "./scenes/gameOver.js";
 
 const config = {
     width: 600,
@@ -9,13 +10,13 @@ const config = {
         autoCenter: Phaser.Scale.CENTER_BOTH,
     },
     physics: {
-        default: 'arcade',
+        default: "arcade",
         arcade: {
             gravity: { x: 0, y: 0 },
             debug: false,
-        }
+        },
     },
-    scene: [Game]
+    scene: [Game, GameOver],
 };
 
 const game = new Phaser.Game(config);
