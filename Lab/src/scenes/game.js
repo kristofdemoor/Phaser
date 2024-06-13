@@ -40,6 +40,8 @@ export default class Game extends Phaser.Scene {
         // Player laser
         this.load.image("playerLaser", "./assets/laser-green.png");
 
+        // Player Score
+
         // Enemy
         this.load.image("enemy", "./assets/tie.png");
 
@@ -167,7 +169,7 @@ export default class Game extends Phaser.Scene {
         });
 
         // Timer
-        this.timer = new Timer(this, 120);
+        this.timer = new Timer(this, 10);
 
         this.timerText = this.add.text(
             475,
@@ -278,10 +280,6 @@ export default class Game extends Phaser.Scene {
         );
     }
 
-    showScore() {
-        console.log(`Score: ${this.player.score}`);
-    }
-
     updateScore() {
         this.player.score += this.points;
         this.displayScore();
@@ -311,19 +309,25 @@ export default class Game extends Phaser.Scene {
     updateTime() {
         let minutesText = this.timer.minutes;
         let secondsText = this.timer.seconds;
-        let miliseconds = this.timer.miliseconds;
+        let milisecondsText = this.timer.miliseconds;
 
-        if (minutesText <= 10) {
+        if (minutesText < 10) {
             minutesText = "0" + minutesText;
         }
-        if (secondsText <= 10) {
+        if (secondsText < 10) {
             secondsText = "0" + secondsText;
         }
-        if (miliseconds <= 10) {
-            miliseconds = "0" + miliseconds;
+        if (milisecondsText < 10) {
+            milisecondsText = "0" + milisecondsText;
         }
-        this.timerText.setText(minutesText + ":" + secondsText) + ":" + miliseconds;
-        //this.timerText.setText(this.timer.seconds);
+
+        this.timerText.setText(minutesText + ":" + secondsText + ":" + milisecondsText);
+
+        if (this.timer.timesUp) {
+            this.registry.set("score", this.player.score);
+            //this.registry.set("score", this.scoreText.text);
+            this.scene.start("gameWonScene");
+        }
     }
 
     playerKilled() {

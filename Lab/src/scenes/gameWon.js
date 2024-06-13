@@ -1,33 +1,36 @@
-export default class GameOver extends Phaser.Scene {
+export default class GameWon extends Phaser.Scene {
     constructor() {
-        super({ key: "gameOverScene" });
+        super({ key: "gameWonScene" });
     }
 
     preload() {
         // Image
-        this.load.image("background", "./assets/gameover.png");
+        this.load.image("background", "./assets/won.png");
 
         // Sounds
-        this.load.audio("gameOverVoice", "./assets/sounds/gameover.mp3");
+
+        this.score = this.registry.get("score");
     }
 
     create() {
         // Background
         this.add.image(300, 400, "background");
 
+        // Score
+        const scoreText = this.add.text(230, 520, "score: " + this.score, {
+            fontFamily: "BAD GRUNGE",
+            fontSize: 56,
+            align: "center",
+            color: "#a0a0a0",
+        });
+
+        console.log(scoreText.width);
+
         // Buttons
         this.createRetryButton();
         this.createQuitButton();
 
         // Sound
-        this.time.delayedCall(
-            1000,
-            () => {
-                this.sound.add("gameOverVoice").play();
-            },
-            null,
-            this
-        );
     }
 
     createRetryButton() {
