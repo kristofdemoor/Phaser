@@ -169,7 +169,7 @@ export default class Game extends Phaser.Scene {
         });
 
         // Timer
-        this.timer = new Timer(this, 10);
+        this.timer = new Timer(this, 20);
 
         this.timerText = this.add.text(
             475,

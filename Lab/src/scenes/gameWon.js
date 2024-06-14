@@ -5,7 +5,7 @@ export default class GameWon extends Phaser.Scene {
 
     preload() {
         // Image
-        this.load.image("background", "./assets/won.png");
+        this.load.image("wonBackground", "./assets/won.png");
 
         // Sounds
 
@@ -14,17 +14,25 @@ export default class GameWon extends Phaser.Scene {
 
     create() {
         // Background
-        this.add.image(300, 400, "background");
+        this.add.image(300, 400, "wonBackground");
 
         // Score
-        const scoreText = this.add.text(230, 520, "score: " + this.score, {
+        const scoreText = this.add.text(300, 540, "score: " + this.score, {
             fontFamily: "BAD GRUNGE",
             fontSize: 56,
             align: "center",
             color: "#a0a0a0",
         });
+        scoreText.setOrigin(0.5);
 
-        console.log(scoreText.width);
+        // High Score
+        const highScoreText = this.add.text(300, 580, "high score: 1200", {
+            fontFamily: "BAD GRUNGE",
+            fontSize: 56,
+            align: "center",
+            color: "#a0a0a0",
+        });
+        highScoreText.setOrigin(0.5);
 
         // Buttons
         this.createRetryButton();
@@ -34,48 +42,42 @@ export default class GameWon extends Phaser.Scene {
     }
 
     createRetryButton() {
-        const retryButton = this.add.text(270, 600, "retry", {
+        const retryButton = this.add.text(300, 650, "retry", {
             fontFamily: "BAD GRUNGE",
-            fontSize: 56,
+            fontSize: 46,
             color: "#ffffff",
         });
+        retryButton.setOrigin(0.5);
         retryButton.setInteractive();
 
         retryButton.on("pointerover", () => {
-            retryButton.setX(261);
-            retryButton.setY(590);
-            retryButton.setFontSize(70);
+            retryButton.setFontSize(60);
         });
 
         retryButton.on("pointerout", () => {
-            retryButton.setX(270);
-            retryButton.setY(600);
-            retryButton.setFontSize(56);
+            retryButton.setFontSize(46);
         });
 
         retryButton.on("pointerdown", () => {
-            this.scene?.start("gameScene");
+            this.scene.start("gameScene");
         });
     }
 
     createQuitButton() {
-        const quitButton = this.add.text(285, 660, "quit", {
+        const quitButton = this.add.text(300, 700, "quit", {
             fontFamily: "BAD GRUNGE",
-            fontSize: 56,
+            fontSize: 46,
             color: "#ffffff",
         });
+        quitButton.setOrigin(0.5);
         quitButton.setInteractive();
 
         quitButton.on("pointerover", () => {
-            quitButton.setX(278);
-            quitButton.setY(650);
-            quitButton.setFontSize(70);
+            quitButton.setFontSize(60);
         });
 
         quitButton.on("pointerout", () => {
-            quitButton.setX(285);
-            quitButton.setY(660);
-            quitButton.setFontSize(56);
+            quitButton.setFontSize(46);
         });
     }
 }

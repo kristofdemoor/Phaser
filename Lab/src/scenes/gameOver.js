@@ -5,7 +5,7 @@ export default class GameOver extends Phaser.Scene {
 
     preload() {
         // Image
-        this.load.image("background", "./assets/gameover.png");
+        this.load.image("gameOverBackground", "./assets/gameover.png");
 
         // Sounds
         this.load.audio("gameOverVoice", "./assets/sounds/gameover.mp3");
@@ -13,7 +13,7 @@ export default class GameOver extends Phaser.Scene {
 
     create() {
         // Background
-        this.add.image(300, 400, "background");
+        this.add.image(300, 400, "gameOverBackground");
 
         // Buttons
         this.createRetryButton();
@@ -31,47 +31,41 @@ export default class GameOver extends Phaser.Scene {
     }
 
     createRetryButton() {
-        const retryButton = this.add.text(270, 600, "retry", {
+        const retryButton = this.add.text(300, 625, "retry", {
             fontFamily: "BAD GRUNGE",
             fontSize: 56,
             color: "#ffffff",
         });
+        retryButton.setOrigin(0.5);
         retryButton.setInteractive();
 
         retryButton.on("pointerover", () => {
-            retryButton.setX(261);
-            retryButton.setY(590);
             retryButton.setFontSize(70);
         });
 
         retryButton.on("pointerout", () => {
-            retryButton.setX(270);
-            retryButton.setY(600);
             retryButton.setFontSize(56);
         });
 
         retryButton.on("pointerdown", () => {
-            this.scene?.start("gameScene");
+            this.scene.start("gameScene");
         });
     }
 
     createQuitButton() {
-        const quitButton = this.add.text(285, 660, "quit", {
+        const quitButton = this.add.text(300, 680, "quit", {
             fontFamily: "BAD GRUNGE",
             fontSize: 56,
             color: "#ffffff",
         });
+        quitButton.setOrigin(0.5);
         quitButton.setInteractive();
 
         quitButton.on("pointerover", () => {
-            quitButton.setX(278);
-            quitButton.setY(650);
             quitButton.setFontSize(70);
         });
 
         quitButton.on("pointerout", () => {
-            quitButton.setX(285);
-            quitButton.setY(660);
             quitButton.setFontSize(56);
         });
     }
