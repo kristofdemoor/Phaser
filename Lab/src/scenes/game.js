@@ -302,6 +302,7 @@ export default class Game extends Phaser.Scene {
         }
         if (this.player.lives === 0) {
             this.playerLive1.setTexture("x-wing-UI-dark");
+            //this.themeSound.stop();
             this.playerKilled();
         }
     }
@@ -331,7 +332,6 @@ export default class Game extends Phaser.Scene {
     }
 
     playerKilled() {
-        console.log("GAME OVER!");
         this.themeSound.stop();
         this.scene.start("gameOverScene");
     }
