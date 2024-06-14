@@ -26,9 +26,9 @@ export default class GameWon extends Phaser.Scene {
         scoreText.setOrigin(0.5);
 
         // High Score
-        const highScoreText = this.add.text(300, 580, "high score: 1200", {
+        const highScoreText = this.add.text(300, 590, "high score: 1200", {
             fontFamily: "BAD GRUNGE",
-            fontSize: 56,
+            fontSize: 50,
             align: "center",
             color: "#a0a0a0",
         });
