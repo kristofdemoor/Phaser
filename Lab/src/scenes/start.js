@@ -5,7 +5,7 @@ export default class Start extends Phaser.Scene {
 
     preload() {
         // Image
-        this.load.image("wonBackground", "./assets/won.png");
+        this.load.image("startBackground", "./assets/start.png");
 
         // Sounds
 
@@ -13,16 +13,7 @@ export default class Start extends Phaser.Scene {
 
     create() {
         // Background
-        this.add.image(300, 400, "wonBackground");
-
-        // Score
-        const scoreText = this.add.text(300, 540, "score: " + this.score, {
-            fontFamily: "BAD GRUNGE",
-            fontSize: 56,
-            align: "center",
-            color: "#a0a0a0",
-        });
-        scoreText.setOrigin(0.5);
+        this.add.image(300, 400, "startBackground");
 
         // Buttons
         this.createStartButton();
@@ -31,20 +22,20 @@ export default class Start extends Phaser.Scene {
     }
 
     createStartButton() {
-        const retryButton = this.add.text(300, 650, "start", {
+        const retryButton = this.add.text(300, 660, "start", {
             fontFamily: "BAD GRUNGE",
-            fontSize: 46,
-            color: "#ffffff",
+            fontSize: 70,
+            color: "#ffff",
         });
         retryButton.setOrigin(0.5);
         retryButton.setInteractive();
 
         retryButton.on("pointerover", () => {
-            retryButton.setFontSize(60);
+            retryButton.setFontSize(80);
         });
 
         retryButton.on("pointerout", () => {
-            retryButton.setFontSize(46);
+            retryButton.setFontSize(70);
         });
 
         retryButton.on("pointerdown", () => {

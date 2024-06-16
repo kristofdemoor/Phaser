@@ -9,7 +9,12 @@ export default class GameWon extends Phaser.Scene {
 
         // Sounds
 
+        // Score
         this.score = this.registry.get("score");
+        // High Score
+        localStorage.setItem("highScore", this.score);
+        this.highScore = localStorage.getItem("highScore");
+
     }
 
     create() {
@@ -21,18 +26,19 @@ export default class GameWon extends Phaser.Scene {
             fontFamily: "BAD GRUNGE",
             fontSize: 56,
             align: "center",
-            color: "#a0a0a0",
+            color: "#ffdc97",
         });
         scoreText.setOrigin(0.5);
 
         // High Score
-        const highScoreText = this.add.text(300, 590, "high score: 1200", {
+        const highScoreText = this.add.text(300, 590, "high score: " + this.highScore, {
             fontFamily: "BAD GRUNGE",
             fontSize: 50,
             align: "center",
-            color: "#a0a0a0",
+            color: "#ffdc97",
         });
         highScoreText.setOrigin(0.5);
+
 
         // Buttons
         this.createRetryButton();
