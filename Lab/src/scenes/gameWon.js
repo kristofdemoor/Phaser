@@ -11,9 +11,15 @@ export default class GameWon extends Phaser.Scene {
 
         // Score
         this.score = this.registry.get("score");
+
         // High Score
-        localStorage.setItem("highScore", this.score);
-        this.highScore = localStorage.getItem("highScore");
+        this.highScore = localStorage.getItem("highScore" || 0);
+
+        if (this.score > this.highScore) {
+            localStorage.setItem("highScore", this.score);
+        }
+
+
 
     }
 
