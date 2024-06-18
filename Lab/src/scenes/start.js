@@ -24,20 +24,20 @@ export default class Start extends Phaser.Scene {
     }
 
     createStartButton() {
-        const startButton = this.add.text(300, 660, "start", {
+        const startButton = this.add.text(300, 710, "start", {
             fontFamily: "BAD GRUNGE",
-            fontSize: 70,
+            fontSize: 50,
             color: "#ffff",
         });
         startButton.setOrigin(0.5);
         startButton.setInteractive();
 
         startButton.on("pointerover", () => {
-            startButton.setFontSize(80);
+            startButton.setFontSize(60);
         });
 
         startButton.on("pointerout", () => {
-            startButton.setFontSize(70);
+            startButton.setFontSize(50);
         });
 
         startButton.on("pointerdown", () => {
