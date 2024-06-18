@@ -8,6 +8,8 @@ export default class GameWon extends Phaser.Scene {
         this.load.image("wonBackground", "./assets/won.png");
 
         // Sounds
+        this.load.audio("wellDone", "./assets/sounds/wellDone.wav");
+        this.load.audio("startTheme", "./assets/sounds/startTheme.mp3");
 
         // Score
         this.score = this.registry.get("score");
@@ -18,9 +20,6 @@ export default class GameWon extends Phaser.Scene {
         if (this.score > this.highScore) {
             localStorage.setItem("highScore", this.score);
         }
-
-
-
     }
 
     create() {
@@ -45,12 +44,21 @@ export default class GameWon extends Phaser.Scene {
         });
         highScoreText.setOrigin(0.5);
 
-
         // Buttons
         this.createRetryButton();
         this.createQuitButton();
 
         // Sound
+        this.time.delayedCall(
+            1100,
+            () => {
+                this.sound.add("wellDone").setVolume(150).play();
+                this.themeSound = this.sound.add("startTheme", { loop: true });
+                this.themeSound.play();
+            },
+            null,
+            this
+        );
     }
 
     createRetryButton() {
@@ -71,6 +79,7 @@ export default class GameWon extends Phaser.Scene {
         });
 
         retryButton.on("pointerdown", () => {
+            this.themeSound.stop();
             this.scene.start("gameScene");
         });
     }
