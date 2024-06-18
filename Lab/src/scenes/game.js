@@ -57,7 +57,7 @@ export default class Game extends Phaser.Scene {
         // Sounds
         this.load.audio("laserSound", "./assets/sounds/laser.mp3");
         this.load.audio("explosionSound", "./assets/sounds/explosion.mp3");
-        this.load.audio("theme", "./assets/sounds/theme.mp3");
+        this.load.audio("gameTheme", "./assets/sounds/gameTheme.mp3");
     }
 
     create() {
@@ -139,7 +139,7 @@ export default class Game extends Phaser.Scene {
         // Sounds
         this.laserSound = this.sound.add("laserSound");
         this.explosionSound = this.sound.add("explosionSound");
-        this.themeSound = this.sound.add("theme", { loop: true });
+        this.themeSound = this.sound.add("gameTheme", { loop: true });
         this.themeSound.play();
 
         // Explosion Animation
@@ -323,9 +323,10 @@ export default class Game extends Phaser.Scene {
 
         this.timerText.setText(minutesText + ":" + secondsText + ":" + milisecondsText);
 
+        // If time is up, player won
         if (this.timer.timesUp) {
             this.registry.set("score", this.player.score);
-            //this.registry.set("score", this.scoreText.text);
+            this.themeSound.stop();
             this.scene.start("gameWonScene");
         }
     }

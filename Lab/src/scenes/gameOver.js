@@ -8,7 +8,8 @@ export default class GameOver extends Phaser.Scene {
         this.load.image("gameOverBackground", "./assets/gameover.png");
 
         // Sounds
-        this.load.audio("gameOverVoice", "./assets/sounds/gameover.mp3");
+        this.load.audio("gameOverVoice", "./assets/sounds/gameOverVoice.mp3");
+        this.load.audio("gameOverTheme", "./assets/sounds/gameOverTheme.mp3");
     }
 
     create() {
@@ -24,6 +25,8 @@ export default class GameOver extends Phaser.Scene {
             1000,
             () => {
                 this.sound.add("gameOverVoice").play();
+                this.themeSound = this.sound.add("gameOverTheme");
+                this.themeSound.play();
             },
             null,
             this
@@ -48,6 +51,7 @@ export default class GameOver extends Phaser.Scene {
         });
 
         retryButton.on("pointerdown", () => {
+            this.themeSound.stop();
             this.scene.start("gameScene");
         });
     }
