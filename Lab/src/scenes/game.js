@@ -169,7 +169,7 @@ export default class Game extends Phaser.Scene {
         });
 
         // Timer
-        this.timer = new Timer(this, 20);
+        this.timer = new Timer(this, 5);
 
         this.timerText = this.add.text(
             475,
@@ -184,6 +184,7 @@ export default class Game extends Phaser.Scene {
     }
 
     update() {
+        1;
         if (!this.gameOver) {
             // Move player x-wing
             if (this.cursors.left.isDown) {
@@ -263,7 +264,7 @@ export default class Game extends Phaser.Scene {
     }
 
     spawnEnemy() {
-        const delay = Phaser.Math.Between(0, 2000);
+        const delay = Phaser.Math.Between(0, 2500);
         this.time.delayedCall(
             delay,
             () => {

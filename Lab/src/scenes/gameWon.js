@@ -50,9 +50,16 @@ export default class GameWon extends Phaser.Scene {
 
         // Sound
         this.time.delayedCall(
-            1100,
+            1000,
             () => {
-                this.sound.add("wellDone").setVolume(150).play();
+                this.sound.add("wellDone").setVolume(1.5).play();
+            },
+            null,
+            this
+        );
+        this.time.delayedCall(
+            2000,
+            () => {
                 this.themeSound = this.sound.add("startTheme", { loop: true });
                 this.themeSound.play();
             },

@@ -24,7 +24,7 @@ export default class GameOver extends Phaser.Scene {
         this.time.delayedCall(
             1000,
             () => {
-                this.sound.add("gameOverVoice").play();
+                this.sound.add("gameOverVoice").setVolume(150).play();
                 this.themeSound = this.sound.add("gameOverTheme");
                 this.themeSound.play();
             },

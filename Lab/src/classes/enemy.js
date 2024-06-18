@@ -18,7 +18,7 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
         this.lasers = scene.physics.add.group({
             classType: Laser,
             //maxSize: 2,
-            runChildUpdate: true
+            runChildUpdate: true,
         });
 
         this.move();
